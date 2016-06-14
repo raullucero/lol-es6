@@ -6,7 +6,7 @@ import Config from './config/config';
 var REQUEST_MATCH_HYSTORY = 'https://lan.api.pvp.net/api/lol/';
 var REQUEST_MIDDLE ='/v2.2/matchlist/by-summoner/';
 
-var REQUEST_COMPLEMENT = '?rankedQueues=RANKED_SOLO_5x5&beginIndex=0&endIndex=10&api_key='+ Config.key;
+var REQUEST_COMPLEMENT = '?beginIndex=0&endIndex=10&api_key='+ Config.key;
 
 import {
   StyleSheet,
@@ -99,7 +99,7 @@ class AllHistory extends Component {
         <ListView
          dataSource={this.state.dataSource}
          renderRow={this.renderHistory}
-         keyboardDismissMode="onDrag"
+         keyboardDismissMode="on-drag"
          keyboardShouldPersistTaps={true}/>
       </ScrollView>
     );

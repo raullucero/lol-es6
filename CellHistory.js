@@ -3,7 +3,8 @@ import RuneMatch from './RuneMatch';
 import Config from './config/config';
 
 var REQUEST_IMAGE_CHAMP_SMALL = 'http://ddragon.leagueoflegends.com/cdn/'+ Config.version +'/img/champion/';
-
+var REQUEST_MATCH = 'https://global.api.pvp.net/api/lol/lan/v2.2/match/';
+var REQUEST_MATCH_MIDDLE = '?api_key=' + Config.key;
 var REQUEST_CHAMPION ='https://global.api.pvp.net/api/lol/static-data/lan/v1.2/champion/';
 var RECUEST_CHAMPION_COMPLEMENT='?champData=image&api_key='+ Config.key;
 var REQUEST_IMAGE_ITEM = 'http://ddragon.leagueoflegends.com/cdn/'+ Config.version +'/img/item/';
@@ -39,8 +40,19 @@ class CellHistory extends Component {
     this.fetchDataChamp();
   }
 //PARA OBTENER LOS DATOS DE IMGAEN CAMPEON
+
+
   fetchDataChamp() {
-    var urlRequest = REQUEST_CHAMPION +this.props.match.participants[0].championId + RECUEST_CHAMPION_COMPLEMENT;
+    fetch(REQUEST_MATCH + this.props.match.matchId + REQUEST_MATCH_MIDDLE)
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({
+       matchDetail: responseData,
+      });
+    })
+    .done();
+
+    var urlRequest = REQUEST_CHAMPION +this.props.match.champion + RECUEST_CHAMPION_COMPLEMENT;
     fetch(urlRequest)
     .then((response) => response.json())
     .then((responseData) => {
@@ -50,6 +62,8 @@ class CellHistory extends Component {
       });
     })
     .done();
+
+
   }
   //Funcion de REdondeo
   roundGoldEarned(gold){
@@ -116,26 +130,27 @@ class CellHistory extends Component {
   }
 
   render() {
-     if(!this.state.loaded){
-       return this.renderLoadingView();
-       }
+    if(!this.state.loaded){
+      return this.renderLoadingView();
+    }
     urlImage = REQUEST_IMAGE_CHAMP_SMALL +this.state.champion.image.full;
-    urlItemImge1 = this.imageItem(this.props.match.participants[0].stats.item1);
-    urlItemImge2 = this.imageItem(this.props.match.participants[0].stats.item2);
-    urlItemImge3 = this.imageItem(this.props.match.participants[0].stats.item3);
-    urlItemImge4 = this.imageItem(this.props.match.participants[0].stats.item4);
-    urlItemImge5 = this.imageItem(this.props.match.participants[0].stats.item5);
-    urlItemImge6 = this.imageItem(this.props.match.participants[0].stats.item6);
-    urlItemImge7 = this.imageItem(this.props.match.participants[0].stats.item7);
+    console.log(this.state.matchDetail.participants[0]);
+    urlItemImge1 = this.imageItem(this.state.matchDetail.participants[0].stats.item1);
+    urlItemImge2 = this.imageItem(this.state.matchDetail.participants[0].stats.item2);
+    urlItemImge3 = this.imageItem(this.state.matchDetail.participants[0].stats.item3);
+    urlItemImge4 = this.imageItem(this.state.matchDetail.participants[0].stats.item4);
+    urlItemImge5 = this.imageItem(this.state.matchDetail.participants[0].stats.item5);
+    urlItemImge6 = this.imageItem(this.state.matchDetail.participants[0].stats.item6);
+    urlItemImge7 = this.imageItem(this.state.matchDetail.participants[0].stats.item7);
 
     //Para mostrar si gano o no
     matchStatus = 'Defeat';
-    if(this.props.match.participants[0].stats.winner){
+    if(this.state.matchDetail.participants[0].stats.winner){
      matchStatus = 'Victory';
     }
     //para obtener de forma reducida el oro
-    gold = this.roundGoldEarned(this.props.match.participants[0].stats.goldEarned);
-    duration = this.roundTime(this.props.match.matchDuration);
+    gold = this.roundGoldEarned(this.state.matchDetail.participants[0].stats.goldEarned);
+    duration = this.roundTime(this.state.matchDetail.matchDuration);
 
     return (
 
