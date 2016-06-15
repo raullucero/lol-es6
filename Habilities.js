@@ -40,21 +40,21 @@ class Habilities extends Component {
 var styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#eeeeee',
     margin: 4,
   },
   wrapperContainer: {
-    borderWidth: 1.5,
-    borderColor: '#424242',
+    borderBottomWidth: 1,
+    borderColor: '#303841',
   },
   name: {
     fontSize: 18,
     paddingLeft: 8,
-    color: 'white',
+    color: '#303841',
   },
   cost: {
     fontSize: 12,
-    color: 'white',
+    color: '#303841',
     paddingLeft: 8,
     paddingTop: 4,
     fontStyle: 'italic',
@@ -67,11 +67,11 @@ var styles = StyleSheet.create({
   },
   textDescription: {
     fontSize: 12,
-    color: 'white',
+    color: '#303841',
   },
   rightContainer: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: '#eeeeee',
   },
   image: {
     width: 44,

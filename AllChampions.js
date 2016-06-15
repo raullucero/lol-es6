@@ -207,7 +207,7 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 100,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#eeeeee',
   },
   containerNoChamp: {
     flex: 1,

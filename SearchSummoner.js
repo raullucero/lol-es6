@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import Region from './config/region';
 import RegionView from './RegionView.js';
 import SummonerView  from './SummonerView.js';
+import Icon from 'react-native-vector-icons/Ionicons';
+
+const myIcon = (<Icon name="ios-search" size={30} color="#900"/>)
 
 import Config from './config/config';
 
@@ -90,19 +93,20 @@ class SearchSummoner extends Component {
 					<View style = {styles.container}>
 						<TextInput
 							style={styles.textInput}
+              placeholder="Search summoner"
 							onChange={
 								(event) => this.updateText(
 									event.nativeEvent.text
 	          					)
 							}/>
-						<TouchableHighlight style={styles.buttonContainer} onPress={this.handleRegionButtonPressed.bind(this)}>
-					    	<Text style={styles.buttonText}>{this.state.region}</Text>
-					  	</TouchableHighlight>
-
-						<TouchableHighlight style={styles.buttonContainer} onPress={this.search.bind(this)}>
-							<Text style={styles.buttonText}>GO!</Text>
-						</TouchableHighlight>
 					</View>
+          <TouchableHighlight style={styles.buttonContainer} onPress={this.handleRegionButtonPressed.bind(this)}>
+              <Text style={styles.buttonText}>{this.state.region}</Text>
+            </TouchableHighlight>
+
+          <TouchableHighlight style={styles.buttonContainer} onPress={this.search.bind(this)}>
+            <Icon name="ios-search" size={24} color="#eeeeee"/>
+          </TouchableHighlight>
 				</View>
 			</View>
 		);
@@ -129,50 +133,56 @@ class SearchSummoner extends Component {
 		if(!this.state.loaded){
 			return this.renderStaticView();
 		}
-    
+
   	return this.renderSummonerView(this.state.summoner);
   }
 }
 
 var styles = StyleSheet.create({
-
 	body:{
-    	backgroundColor:'black',
-    	height: 800,
+  	backgroundColor:'#eeeeee',
+  	height: 800,
   },
   buttonContainer : {
 		flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#051980',
-    marginTop: 5,
-    margin: 5,
-    borderWidth: 1,
-    borderColor: '#0C33F4',
-    borderRadius: 8,
-    height: 55,
+    backgroundColor: '#00adb5',
+    margin: 3,
+    height: 40,
+    width: 50,
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 1,
+      width: 0
+    }
 	},
 	buttonText: {
-		fontSize: 22,
+		fontSize: 16,
 		fontWeight: 'bold',
-		color: 'white',
+		color: '#eeeeee',
 	},
 	container: {
-		flex: 1,
-		padding: 16,
+    backgroundColor: '#eeeeee',
+    height: 50,
+    borderColor: '#303841',
+    borderBottomWidth: 1,
 	},
 	main: {
-		marginTop : 200
+		marginTop : 70,
+    flexDirection: 'row',
+    height: 50,
+    borderColor: '#303841',
+    borderBottomWidth: 1,
 	},
 	textInput: {
+    width: 270,
 		height: 40,
-		marginBottom: 10,
-		borderRadius: 8,
-		borderWidth: 2,
-		borderColor: '#BABABA',
-		padding: 4,
 		fontSize: 20,
-		backgroundColor: 'white',
+    padding: 3,
+    paddingLeft: 8,
+		backgroundColor: '#eeeeee',
 	}
 });
 

@@ -26,6 +26,8 @@ class NoChamps extends Component {
 var styles = StyleSheet.create({
   containerNoChamp: {
     flex: 1,
+    backgroundColor: '#eeeeee',
+
     alignItems: 'center',
   }
 });

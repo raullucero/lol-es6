@@ -33,12 +33,12 @@ class Menu extends Component {
       <View style={styles.body}>
           <View style={styles.main}>
 
-            <TouchableHighlight style={styles.container} onPress={this.onSelectChampions.bind(this)}>
-              <Text style={styles.name}>Champion</Text>
+            <TouchableHighlight style={styles.element} onPress={this.onSelectChampions.bind(this)}>
+              <Text style={styles.name}>Champions</Text>
            </TouchableHighlight>
 
-            <TouchableHighlight style={styles.containerBottom} onPress={this.onSelectSummoner.bind(this)}>
-              <Text style={styles.name}>Summoner</Text>
+            <TouchableHighlight style={styles.element} onPress={this.onSelectSummoner.bind(this)}>
+              <Text style={styles.name}>Summoners</Text>
             </TouchableHighlight>
 
           </View>
@@ -51,44 +51,35 @@ class Menu extends Component {
 var styles = StyleSheet.create({
 
   body:{
-    backgroundColor:'#000000',
+    backgroundColor: '#eeeeee',
     height: 800,
 
   },
-  main:{
-    marginTop: 120,
-  },
-  container: {
+  main: {
+    marginTop: 80,
     flexDirection: 'row',
+    flex: 2,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#051980',
-    marginTop: 20,
-    borderWidth: 1,
-    borderColor: '#0C33F4',
-    margin: 5,
-    borderRadius: 12,
-    height: 200,
+  },
 
-  },
-  containerBottom: {
-    flexDirection: 'row',
+  element: {
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#051980',
-    marginTop: 5,
-    margin: 5,
-    borderWidth: 1,
-    borderColor: '#0C33F4',
-    borderRadius: 12,
-    height: 200,
+    backgroundColor: '#00adb5',
+    margin: 10,
+    width: 160,
+    height: 150,
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 1,
+      width: 0
+    }
   },
   name: {
     fontSize: 20,
     marginBottom: 8,
     textAlign: 'center',
-    color:'white',
-    fontSize: 36,
+    color:'#eeeeee',
   },
 
 });

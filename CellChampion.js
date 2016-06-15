@@ -45,28 +45,27 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
-    borderWidth: .75,
-    borderColor: '#5C5C5C',
+    backgroundColor: '#eeeeee',
+    borderWidth: 1,
+    borderColor: '#303841',
   },
   rightContainer: {
     flex: 1,
   },
   name: {
     fontSize: 20,
-    color: 'white',
+    color: '#303841',
     marginBottom: 8,
     textAlign: 'center',
   },
   title: {
     textAlign: 'center',
-    color: 'white',
+    color: '#303841',
   },
   image: {
     width: 60,
     height: 60,
-    borderWidth: 1,
-    borderColor: '#5C5C5C',
+
   },
 });
 

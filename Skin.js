@@ -22,8 +22,7 @@ var styles = StyleSheet.create({
   wrapperSkin: {
     width: 124,
     height: 224,
-    borderWidth: 3,
-    borderColor: '#BDBDBD',
+
   },
   button: {
     margin: 7,
@@ -31,6 +30,12 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#1C1C1C',
     borderRadius: 3,
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 1,
+      width: 0
+    }
   },
 });
 

@@ -95,7 +95,7 @@ class Champion extends Component {
         style={styles.containerMain}>
         <ScrollView
           scrollEventThrottle={200}
-          contentInset={{top: -50}}
+          contentInset={{top: 0}}
           style={styles.scrollView}
           horizontal={true} >
           {SKINS_IMAGES.map(createSkinRow)}
@@ -128,30 +128,32 @@ var createSkinRow = (uri, i) => <Skin key={i} uri={uri} />;
 var styles = StyleSheet.create({
 
   containerMain: {
-    backgroundColor: 'black',
+    backgroundColor: '#eeeeee',
+    marginTop: 65,
   },
   scrollView: {
-    backgroundColor: '#1C1C1C',
-    height: 270,
+    backgroundColor: '#eeeeee',
+    height: 260,
   },
   name: {
     fontSize: 26,
     marginTop: 7,
-    color: 'white',
+    color: '#303841',
     textAlign: 'center',
     fontWeight: 'bold'
   },
   title: {
     fontSize: 11,
-    color: 'white',
+    color: '#303841',
     textAlign: 'center',
     paddingBottom: 6,
   },
   sections: {
     fontSize: 14,
     fontWeight: 'bold',
-    padding: 6,
-    color: 'white',
+    padding: 3,
+    marginBottom: 5,
+    color: '#303841',
     textAlign: 'center',
   },
 });

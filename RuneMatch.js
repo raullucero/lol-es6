@@ -81,14 +81,13 @@ var styles = StyleSheet.create({
   rightContainer: {
     flex: 1,
     alignItems: 'flex-start',
-    overflow:'hidden',
     marginLeft: 5,
   },
   ligthBlue:{
-    backgroundColor: '#2c2c64',
+    backgroundColor: '#eeeeee',
   },
   simpleText:{
-    color:'#E6E6E6'
+    color:'#303841'
   },
   image: {
     width: 65,

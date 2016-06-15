@@ -11,7 +11,6 @@ var urlImageIcons_minions= 'http://ddragon.leagueoflegends.com/cdn/6.11.1/img/ui
 var urlImageIcons_gold = 'http://ddragon.leagueoflegends.com/cdn/6.11.1/img/ui/gold.png';  // solo hasta la vercion
 var urlImageIcons_KDA= 'http://ddragon.leagueoflegends.com/cdn/6.11.1/img/ui/score.png';   // 5.2.1
 
-var index = 0;
 
 import {
   View,
@@ -31,6 +30,7 @@ class CellHistory extends Component {
       champion: null,
       loaded: false,
       touched:false,
+      index: 0,
       dataSourceRune: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       }),
@@ -48,15 +48,17 @@ class CellHistory extends Component {
     .then((response) => response.json())
     .then((responseData) => {
 
+      let _i = 0;
       responseData.participants.forEach((participant, _index) => {
         if(participant.championId === this.props.match.champion) {
-          index = _index;
+          _i = _index;
         }
       });
+
       this.setState({
         matchDetail: responseData,
         loaded: true,
-        dataSourceRune: this.state.dataSourceRune.cloneWithRows(responseData.participants[index].runes)
+        index: _i,
       });
 
     })
@@ -114,9 +116,9 @@ class CellHistory extends Component {
   }
 
   _onPressDetails() {
-    // this.setState({
-    //   dataSourceRune: this.state.dataSourceRune.cloneWithRows(this.state.matchDetail.participants[index].runes),
-    // });
+    this.setState({
+      dataSourceRune: this.state.dataSourceRune.cloneWithRows(this.state.matchDetail.participants[this.state.index].runes),
+    });
     //segun esto es una animacion, tomado de ract-native Examples UiExplorer ListView
     var config = layoutAnimationConfigs[20 % 3];
     LayoutAnimation.configureNext(config);
@@ -131,21 +133,21 @@ class CellHistory extends Component {
       return this.renderLoadingView();
     }
 
-    urlItemImge1 = this.imageItem(this.state.matchDetail.participants[index].stats.item1);
-    urlItemImge2 = this.imageItem(this.state.matchDetail.participants[index].stats.item2);
-    urlItemImge3 = this.imageItem(this.state.matchDetail.participants[index].stats.item3);
-    urlItemImge4 = this.imageItem(this.state.matchDetail.participants[index].stats.item4);
-    urlItemImge5 = this.imageItem(this.state.matchDetail.participants[index].stats.item5);
-    urlItemImge6 = this.imageItem(this.state.matchDetail.participants[index].stats.item6);
-    urlItemImge7 = this.imageItem(this.state.matchDetail.participants[index].stats.item7);
+    urlItemImge1 = this.imageItem(this.state.matchDetail.participants[this.state.index].stats.item1);
+    urlItemImge2 = this.imageItem(this.state.matchDetail.participants[this.state.index].stats.item2);
+    urlItemImge3 = this.imageItem(this.state.matchDetail.participants[this.state.index].stats.item3);
+    urlItemImge4 = this.imageItem(this.state.matchDetail.participants[this.state.index].stats.item4);
+    urlItemImge5 = this.imageItem(this.state.matchDetail.participants[this.state.index].stats.item5);
+    urlItemImge6 = this.imageItem(this.state.matchDetail.participants[this.state.index].stats.item6);
+    urlItemImge7 = this.imageItem(this.state.matchDetail.participants[this.state.index].stats.item7);
 
     //Para mostrar si gano o no
     matchStatus = 'Defeat';
-    if(this.state.matchDetail.participants[index].stats.winner){
+    if(this.state.matchDetail.participants[this.state.index].stats.winner){
      matchStatus = 'Victory';
     }
     //para obtener de forma reducida el oro
-    gold = this.roundGoldEarned(this.state.matchDetail.participants[index].stats.goldEarned);
+    gold = this.roundGoldEarned(this.state.matchDetail.participants[this.state.index].stats.goldEarned);
     duration = this.roundTime(this.state.matchDetail.matchDuration);
     return (
         <TouchableOpacity onPress={this._onPressDetails.bind(this)}>
@@ -179,7 +181,7 @@ class CellHistory extends Component {
                   <Image
                      style={styles.iconimage}
                      source={{uri: urlImageIcons_KDA}}/>
-                  <Text style={styles.simpleText} > {this.state.matchDetail.participants[index].stats.kills} / {this.state.matchDetail.participants[index].stats.deaths} / {this.state.matchDetail.participants[index].stats.assists} </Text>
+                  <Text style={styles.simpleText} > {this.state.matchDetail.participants[this.state.index].stats.kills} / {this.state.matchDetail.participants[this.state.index].stats.deaths} / {this.state.matchDetail.participants[this.state.index].stats.assists} </Text>
                 </View>
                 <View style={styles.itemContiner}>
                   <Image
@@ -209,7 +211,7 @@ class CellHistory extends Component {
                    <Image
                      style={styles.iconimage}
                      source={{uri: urlImageIcons_minions}}/>
-                   <Text style={[styles.simpleText , styles.iconText]} > {this.state.matchDetail.participants[index].stats.minionsKilled} </Text>
+                   <Text style={[styles.simpleText , styles.iconText]} > {this.state.matchDetail.participants[this.state.index].stats.minionsKilled} </Text>
                   </View>
                   <View style={styles.iconContainer}>
                    <Image
@@ -224,25 +226,25 @@ class CellHistory extends Component {
               <View>
                <View style={[styles.CenterContainer, styles.ligthBlue]}>
                 <Text style={[styles.simpleText]}>
-                  Total Daño Recibido : {this.state.matchDetail.participants[index].stats.totalDamageTaken}
+                  Total Daño Recibido : {this.state.matchDetail.participants[this.state.index].stats.totalDamageTaken}
                 </Text>
                 <Text style={[styles.simpleText]}>
-                  Total Daño Repartido : {this.state.matchDetail.participants[index].stats.totalDamageDealt}
+                  Total Daño Repartido : {this.state.matchDetail.participants[this.state.index].stats.totalDamageDealt}
                 </Text>
                 <Text style={[styles.simpleText]}>
-                  Total Daño Verdadero Repartido : {this.state.matchDetail.participants[index].stats.trueDamageDealt}
+                  Total Daño Verdadero Repartido : {this.state.matchDetail.participants[this.state.index].stats.trueDamageDealt}
                 </Text>
                 <Text style={[styles.simpleText]}>
-                  Total Daño Fisico Repartido : {this.state.matchDetail.participants[index].stats.physicalDamageDealt}
+                  Total Daño Fisico Repartido : {this.state.matchDetail.participants[this.state.index].stats.physicalDamageDealt}
                 </Text>
                 <Text style={[styles.simpleText]}>
-                  Total Daño Magico Repartido : {this.state.matchDetail.participants[index].stats.magicDamageDealt}
+                  Total Daño Magico Repartido : {this.state.matchDetail.participants[this.state.index].stats.magicDamageDealt}
                 </Text>
                 <Text style={[styles.simpleText]}>
-                  Multi Kill Mas Larga : {this.state.matchDetail.participants[index].stats.largestMultiKill}
+                  Multi Kill Mas Larga : {this.state.matchDetail.participants[this.state.index].stats.largestMultiKill}
                 </Text>
                 <Text style={[styles.simpleText]}>
-                  Wards Colocados: {this.state.matchDetail.participants[index].stats.wardsPlaced}
+                  Wards Colocados: {this.state.matchDetail.participants[this.state.index].stats.wardsPlaced}
                 </Text>
               </View>
               <ListView
@@ -262,25 +264,28 @@ class CellHistory extends Component {
 }
 
 var styles = StyleSheet.create({
-    container: {
+  container: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: .75,
-    borderColor: '#000000',
+    borderWidth: 1,
+    borderColor: '#303841',
   },
   ligthBlue:{
 
-    backgroundColor: '#2c2c64',
+    backgroundColor: '#eeeeee',
   },
   simpleText:{
-    color:'#E6E6E6'
+    color:'#303841'
   },
   victoryText:{
-    backgroundColor:'green'
+    backgroundColor:'green',
+    color:'#eeeeee'
+
   },
   defeatText:{
-    backgroundColor:'red'
+    backgroundColor:'red',
+    color:'#eeeeee'
   },
   durationText:{
     marginRight:5,
@@ -302,7 +307,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#eeeeee',
     marginTop: 184
    },
   CenterContainer: {
@@ -314,7 +319,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
   },
   layoutImage:{
-    margin: 5,
     backgroundColor: 'transparent'
   },
   image: {
@@ -337,7 +341,7 @@ var styles = StyleSheet.create({
     marginLeft: 40,
     marginTop: 40,
     backgroundColor: 'transparent',
-    color: '#E6E6E6'
+    color: '#303841'
   },
 });
 //**************[Variables de Animacion]********************************

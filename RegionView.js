@@ -20,7 +20,7 @@ class RegionView extends Component {
         };
     }
 
-    rowPressed(key) {
+  rowPressed(key) {
     var currency = this.props.currency
       .filter(prop => prop.key === key)[0];
 

@@ -19,7 +19,7 @@ class SummonerView extends Component {
               source={{uri: this.props.summoner.icon}}/>
             <View style={styles.rightContainer}>
               <Text style = {[ styles.simpleText , styles.name]}>{this.props.summoner.name }</Text>
-              <Text style = {styles.simpleText}>level-{this.props.summoner.summonerLevel}</Text>
+              <Text style = {styles.simpleText}>level {this.props.summoner.summonerLevel}</Text>
             </View>
           </View>
           <AllHistory
@@ -31,13 +31,15 @@ class SummonerView extends Component {
 
 var styles = StyleSheet.create({
   body:{
-      backgroundColor:'#0B0B61',
+      backgroundColor:'#eeeeee',
     },
   container: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#0c0c34',
+    backgroundColor: '#eeeeee',
+    borderBottomWidth: 1,
+    borderColor: '#303841',
     marginTop: 64
   },
   rightContainer: {
@@ -48,13 +50,12 @@ var styles = StyleSheet.create({
     marginBottom: 8,
   },
   simpleText: {
-    color: '#E6E6E6',
+    color: '#303841',
     textAlign: 'center',
   },
   image: {
     width: 80,
     height: 80,
-    margin: 5,
   },
 });
 

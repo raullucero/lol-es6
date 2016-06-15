@@ -41,6 +41,7 @@ var styles = StyleSheet.create({
     padding: 3,
     paddingLeft: 8,
     flexDirection: 'row',
+    backgroundColor: '#eeeeee',
     alignItems: 'center',
   },
   searchBarInput: {
@@ -49,20 +50,26 @@ var styles = StyleSheet.create({
     flex: 4,
   },
   buttonText: {
-    fontSize: 18,
-    color: 'white',
+    fontSize: 16,
+    color: '#eeeeee',
     alignSelf: 'center'
   },
   button: {
     height: 30,
     flex: 1,
+    width: 20,
+    margin: 3,
     flexDirection: 'row',
-    backgroundColor: '#051980',
-    borderColor: '#0C33F4',
-    borderWidth: 1,
-    borderRadius: 8,
+    backgroundColor: '#00adb5',
     alignSelf: 'stretch',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    shadowColor: "#000000",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 1,
+      width: 0
+    }
   },
 });
 
