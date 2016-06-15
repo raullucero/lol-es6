@@ -6,7 +6,7 @@ import Config from './config/config';
 var REQUEST_MATCH_HYSTORY = 'https://lan.api.pvp.net/api/lol/';
 var REQUEST_MIDDLE ='/v2.2/matchlist/by-summoner/';
 
-var REQUEST_COMPLEMENT = '?beginIndex=0&endIndex=10&api_key='+ Config.key;
+var REQUEST_COMPLEMENT = '?beginIndex=0&endIndex=8&api_key='+ Config.key;
 
 import {
   StyleSheet,
@@ -40,13 +40,11 @@ class AllHistory extends Component {
 
   fetchData() {
     var REQUEST_URL = REQUEST_MATCH_HYSTORY + this.props.summoner.region + REQUEST_MIDDLE + this.props.summoner.id + REQUEST_COMPLEMENT ;
-    console.log(REQUEST_URL);
     fetch(REQUEST_URL)
     .then((response) => response.json())
     .then((responseData) => {
-      console.log(responseData);
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(responseData.matches.reverse()),
+        dataSource: this.state.dataSource.cloneWithRows(responseData.matches),
         loaded: true,
       });
     })
@@ -78,7 +76,7 @@ class AllHistory extends Component {
   renderHistory(match): ReactElement {
     return (
        <CellHistory
-         //onSelect={() => this.selectMatch(match)}
+         onSelect={() => this.selectMatch(match)}
         match={match} />
 
     );

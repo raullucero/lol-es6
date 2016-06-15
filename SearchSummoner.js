@@ -129,7 +129,8 @@ class SearchSummoner extends Component {
 		if(!this.state.loaded){
 			return this.renderStaticView();
 		}
-    	return this.renderSummonerView(this.state.summoner);
+    
+  	return this.renderSummonerView(this.state.summoner);
   }
 }
 

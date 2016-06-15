@@ -82,7 +82,6 @@ var styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     overflow:'hidden',
-    textAlign: 'left',
     marginLeft: 5,
   },
   ligthBlue:{
