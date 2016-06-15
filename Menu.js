@@ -13,7 +13,7 @@ import {
 class Menu extends Component {
 
   onSelectChampions() {
-    console.log(this.props);
+    // console.log(this.props);
     this.props.navigator.push({
       title: 'All Champions',
       component: AllChampions,

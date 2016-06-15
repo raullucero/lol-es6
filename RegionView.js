@@ -29,7 +29,6 @@ class RegionView extends Component {
   }
 
   renderRow(rowData, sectionID, rowID) {
-                console.log(rowData);
     return (
         <TouchableHighlight onPress={() => this.rowPressed(rowData.key)}
           underlayColor='#dddddd'>

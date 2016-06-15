@@ -48,15 +48,15 @@ class AllChampions extends Component {
 
   componentDidMount(){
     this.fetchData();
-    console.log(REQUEST_URL);
+    // console.log(REQUEST_URL);
   }
 
   fetchData() {
     fetch(REQUEST_URL)
     .then((response) => response.json())
     .then((responseData) => {
-      console.log(responseData);
-      console.log(this.state);
+      // console.log(responseData);
+      // console.log(this.state);
 
       this.setState(
         {
@@ -145,11 +145,11 @@ class AllChampions extends Component {
 
   showFreeRotation(){
     var freeChamps = {};
-    console.log(this.state.jFreeRotation);
+    // console.log(this.state.jFreeRotation);
     var self = this;
     this.state.jFreeRotation.forEach(function(champ) {
-      console.log(champ);
-      console.log(champions[champ.id]);
+      // console.log(champ);
+      // console.log(champions[champ.id]);
       freeChamps[champions[champ.id]] = self.state.jChampions[champions[champ.id]]
     });
 
