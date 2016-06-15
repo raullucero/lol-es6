@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import RuneMatch from './RuneMatch';
 import Config from './config/config';
+import ChampionMatch from'./ChampionMatch';
 
-var REQUEST_IMAGE_CHAMP_SMALL = 'http://ddragon.leagueoflegends.com/cdn/'+ Config.version +'/img/champion/';
 var REQUEST_MATCH = 'https://global.api.pvp.net/api/lol/lan/v2.2/match/';
 var REQUEST_MATCH_MIDDLE = '?api_key=' + Config.key;
-var REQUEST_CHAMPION ='https://global.api.pvp.net/api/lol/static-data/lan/v1.2/champion/';
-var RECUEST_CHAMPION_COMPLEMENT='?champData=image&api_key='+ Config.key;
+
 var REQUEST_IMAGE_ITEM = 'http://ddragon.leagueoflegends.com/cdn/'+ Config.version +'/img/item/';
 var urlImageIcons_minions= 'http://ddragon.leagueoflegends.com/cdn/6.11.1/img/ui/minion.png'; // estos iconos estan
 var urlImageIcons_gold = 'http://ddragon.leagueoflegends.com/cdn/6.11.1/img/ui/gold.png';  // solo hasta la vercion
 var urlImageIcons_KDA= 'http://ddragon.leagueoflegends.com/cdn/6.11.1/img/ui/score.png';   // 5.2.1
+
+var index = 0;
 
 import {
   View,
@@ -37,32 +38,29 @@ class CellHistory extends Component {
   }
 
   componentDidMount(){
-    this.fetchDataChamp();
+    this.fetchDataMatch();
   }
-//PARA OBTENER LOS DATOS DE IMGAEN CAMPEON
+  //PARA OBTENER LOS DATOS DE IMGAEN CAMPEON
 
 
-  fetchDataChamp() {
+  fetchDataMatch() {
     fetch(REQUEST_MATCH + this.props.match.matchId + REQUEST_MATCH_MIDDLE)
     .then((response) => response.json())
     .then((responseData) => {
-      this.setState({
-       matchDetail: responseData,
+
+      responseData.participants.forEach((participant, _index) => {
+        if(participant.championId === this.props.match.champion) {
+          index = _index;
+        }
       });
+      this.setState({
+        matchDetail: responseData,
+        loaded: true,
+        dataSourceRune: this.state.dataSourceRune.cloneWithRows(responseData.participants[index].runes)
+      });
+
     })
     .done();
-
-    var urlRequest = REQUEST_CHAMPION +this.props.match.champion + RECUEST_CHAMPION_COMPLEMENT;
-    fetch(urlRequest)
-    .then((response) => response.json())
-    .then((responseData) => {
-      this.setState({
-       champion: responseData,
-       loaded: true
-      });
-    })
-    .done();
-
 
   }
   //Funcion de REdondeo
@@ -116,15 +114,14 @@ class CellHistory extends Component {
   }
 
   _onPressDetails() {
-    this.setState({
-        dataSourceRune: this.state.dataSourceRune.cloneWithRows(this.props.match.participants[0].runes),
-      });
+    // this.setState({
+    //   dataSourceRune: this.state.dataSourceRune.cloneWithRows(this.state.matchDetail.participants[index].runes),
+    // });
     //segun esto es una animacion, tomado de ract-native Examples UiExplorer ListView
     var config = layoutAnimationConfigs[20 % 3];
     LayoutAnimation.configureNext(config);
    //una ves precionado cambiamos la variable de estado para mostrar los detalles
     this.setState({
-
       touched: this.state.touched === true ? false : true,
     });
   }
@@ -133,136 +130,130 @@ class CellHistory extends Component {
     if(!this.state.loaded){
       return this.renderLoadingView();
     }
-    urlImage = REQUEST_IMAGE_CHAMP_SMALL +this.state.champion.image.full;
-    console.log(this.state.matchDetail.participants[0]);
-    urlItemImge1 = this.imageItem(this.state.matchDetail.participants[0].stats.item1);
-    urlItemImge2 = this.imageItem(this.state.matchDetail.participants[0].stats.item2);
-    urlItemImge3 = this.imageItem(this.state.matchDetail.participants[0].stats.item3);
-    urlItemImge4 = this.imageItem(this.state.matchDetail.participants[0].stats.item4);
-    urlItemImge5 = this.imageItem(this.state.matchDetail.participants[0].stats.item5);
-    urlItemImge6 = this.imageItem(this.state.matchDetail.participants[0].stats.item6);
-    urlItemImge7 = this.imageItem(this.state.matchDetail.participants[0].stats.item7);
+
+    urlItemImge1 = this.imageItem(this.state.matchDetail.participants[index].stats.item1);
+    urlItemImge2 = this.imageItem(this.state.matchDetail.participants[index].stats.item2);
+    urlItemImge3 = this.imageItem(this.state.matchDetail.participants[index].stats.item3);
+    urlItemImge4 = this.imageItem(this.state.matchDetail.participants[index].stats.item4);
+    urlItemImge5 = this.imageItem(this.state.matchDetail.participants[index].stats.item5);
+    urlItemImge6 = this.imageItem(this.state.matchDetail.participants[index].stats.item6);
+    urlItemImge7 = this.imageItem(this.state.matchDetail.participants[index].stats.item7);
 
     //Para mostrar si gano o no
     matchStatus = 'Defeat';
-    if(this.state.matchDetail.participants[0].stats.winner){
+    if(this.state.matchDetail.participants[index].stats.winner){
      matchStatus = 'Victory';
     }
     //para obtener de forma reducida el oro
-    gold = this.roundGoldEarned(this.state.matchDetail.participants[0].stats.goldEarned);
+    gold = this.roundGoldEarned(this.state.matchDetail.participants[index].stats.goldEarned);
     duration = this.roundTime(this.state.matchDetail.matchDuration);
-
     return (
+        <TouchableOpacity onPress={this._onPressDetails.bind(this)}>
+          <View>
+            <View style={[styles.container , styles.ligthBlue]}>
+              <ChampionMatch
+                champion={this.props.match.champion}
+                gold={gold}
+                />
+              <View style={styles.rightContainer}>
 
-        <TouchableOpacity onPress={this._onPressDetails}>
-        <View>
-          <View style={[styles.container , styles.ligthBlue]}>
-            <Image
-              style={[styles.layoutImage, styles.image]}
-              source={{uri: urlImage}}>
-              <Text style={styles.nestedText}>
-                {this.props.match.participants[0].stats.champLevel}
+               { matchStatus === 'Victory' ?
+                <Text style={[styles.simpleText,styles.victoryText]} >
+                  {matchStatus}
+                 </Text> :
+                 <Text />
+                }
+                { matchStatus === 'Defeat' ?
+                <Text style={[styles.simpleText,styles.defeatText]} >
+                  {matchStatus}
+                 </Text> :
+                 <Text />
+                }
+
+              <Text style={[styles.simpleText , styles.durationText]}>
+                    {duration}
               </Text>
-            </Image>
-            <View style={styles.rightContainer}>
-
-             { matchStatus === 'Victory' ?
-              <Text style={[styles.simpleText,styles.victoryText]} >
-                {matchStatus}
-               </Text> :
-               <Text />
-              }
-              { matchStatus === 'Defeat' ?
-              <Text style={[styles.simpleText,styles.defeatText]} >
-                {matchStatus}
-               </Text> :
-               <Text />
-              }
-
-            <Text style={[styles.simpleText , styles.durationText]}>
-                  {duration}
-            </Text>
-            </View>
-            <View style={styles.CenterContainer}>
-              <View style={styles.iconContainer}>
-                <Image
-                   style={styles.iconimage}
-                   source={{uri: urlImageIcons_KDA}}/>
-                <Text style={styles.simpleText} > {this.props.match.participants[0].stats.kills} / {this.props.match.participants[0].stats.deaths} / {this.props.match.participants[0].stats.assists} </Text>
               </View>
-              <View style={styles.itemContiner}>
-                <Image
-                style={styles.itemimage}
-                source={{uri: urlItemImge1}}/>
-                <Image
-                style={styles.itemimage}
-                source={{uri: urlItemImge2}}/>
-                <Image
-                style={styles.itemimage}
-                source={{uri: urlItemImge3}}/>
-                <Image
-                style={styles.itemimage}
-                source={{uri: urlItemImge4}}/>
-                <Image
-                style={styles.itemimage}
-                source={{uri: urlItemImge5}}/>
-                <Image
-                style={styles.itemimage}
-                source={{uri: urlItemImge6}}/>
-                <Image
-                style={styles.itemimage}
-                source={{uri: urlItemImge7}}/>
-              </View>
-               <View style={styles.iconsContainer}>
+              <View style={styles.CenterContainer}>
                 <View style={styles.iconContainer}>
-                 <Image
-                   style={styles.iconimage}
-                   source={{uri: urlImageIcons_minions}}/>
-                 <Text style={[styles.simpleText , styles.iconText]} > {this.props.match.participants[0].stats.minionsKilled} </Text>
+                  <Image
+                     style={styles.iconimage}
+                     source={{uri: urlImageIcons_KDA}}/>
+                  <Text style={styles.simpleText} > {this.state.matchDetail.participants[index].stats.kills} / {this.state.matchDetail.participants[index].stats.deaths} / {this.state.matchDetail.participants[index].stats.assists} </Text>
                 </View>
-                <View style={styles.iconContainer}>
-                 <Image
-                   style={styles.iconimage}
-                   source={{uri: urlImageIcons_gold}}/>
-                 <Text style={[ styles.simpleText , styles.iconText]}> {gold} </Text>
+                <View style={styles.itemContiner}>
+                  <Image
+                  style={styles.itemimage}
+                  source={{uri: urlItemImge1}}/>
+                  <Image
+                  style={styles.itemimage}
+                  source={{uri: urlItemImge2}}/>
+                  <Image
+                  style={styles.itemimage}
+                  source={{uri: urlItemImge3}}/>
+                  <Image
+                  style={styles.itemimage}
+                  source={{uri: urlItemImge4}}/>
+                  <Image
+                  style={styles.itemimage}
+                  source={{uri: urlItemImge5}}/>
+                  <Image
+                  style={styles.itemimage}
+                  source={{uri: urlItemImge6}}/>
+                  <Image
+                  style={styles.itemimage}
+                  source={{uri: urlItemImge7}}/>
+                </View>
+                 <View style={styles.iconsContainer}>
+                  <View style={styles.iconContainer}>
+                   <Image
+                     style={styles.iconimage}
+                     source={{uri: urlImageIcons_minions}}/>
+                   <Text style={[styles.simpleText , styles.iconText]} > {this.state.matchDetail.participants[index].stats.minionsKilled} </Text>
+                  </View>
+                  <View style={styles.iconContainer}>
+                   <Image
+                     style={styles.iconimage}
+                     source={{uri: urlImageIcons_gold}}/>
+                   <Text style={[ styles.simpleText , styles.iconText]}> {gold} </Text>
+                  </View>
                 </View>
               </View>
             </View>
+            {this.state.touched === true ?
+              <View>
+               <View style={[styles.CenterContainer, styles.ligthBlue]}>
+                <Text style={[styles.simpleText]}>
+                  Total Daño Recibido : {this.state.matchDetail.participants[index].stats.totalDamageTaken}
+                </Text>
+                <Text style={[styles.simpleText]}>
+                  Total Daño Repartido : {this.state.matchDetail.participants[index].stats.totalDamageDealt}
+                </Text>
+                <Text style={[styles.simpleText]}>
+                  Total Daño Verdadero Repartido : {this.state.matchDetail.participants[index].stats.trueDamageDealt}
+                </Text>
+                <Text style={[styles.simpleText]}>
+                  Total Daño Fisico Repartido : {this.state.matchDetail.participants[index].stats.physicalDamageDealt}
+                </Text>
+                <Text style={[styles.simpleText]}>
+                  Total Daño Magico Repartido : {this.state.matchDetail.participants[index].stats.magicDamageDealt}
+                </Text>
+                <Text style={[styles.simpleText]}>
+                  Multi Kill Mas Larga : {this.state.matchDetail.participants[index].stats.largestMultiKill}
+                </Text>
+                <Text style={[styles.simpleText]}>
+                  Wards Colocados: {this.state.matchDetail.participants[index].stats.wardsPlaced}
+                </Text>
+              </View>
+              <ListView
+                dataSource={this.state.dataSourceRune}
+                renderRow={this.renderRowRune}
+                contentInset={{top: -65}}
+                style={styles.runelist}/>
+              </View> :
+              <View/>
+            }
           </View>
-          {this.state.touched === true ?
-            <View>
-             <View style={[styles.CenterContainer, styles.ligthBlue]}>
-              <Text style={[styles.simpleText]}>
-                Total Daño Recibido : {this.props.match.participants[0].stats.totalDamageTaken}
-              </Text>
-              <Text style={[styles.simpleText]}>
-                Total Daño Repartido : {this.props.match.participants[0].stats.totalDamageDealt}
-              </Text>
-              <Text style={[styles.simpleText]}>
-                Total Daño Verdadero Repartido : {this.props.match.participants[0].stats.trueDamageDealt}
-              </Text>
-              <Text style={[styles.simpleText]}>
-                Total Daño Fisico Repartido : {this.props.match.participants[0].stats.physicalDamageDealt}
-              </Text>
-              <Text style={[styles.simpleText]}>
-                Total Daño Magico Repartido : {this.props.match.participants[0].stats.magicDamageDealt}
-              </Text>
-              <Text style={[styles.simpleText]}>
-                Multi Kill Mas Larga : {this.props.match.participants[0].stats.largestMultiKill}
-              </Text>
-              <Text style={[styles.simpleText]}>
-                Wards Colocados: {this.props.match.participants[0].stats.wardsPlaced}
-              </Text>
-            </View>
-            <ListView
-              dataSource={this.state.dataSourceRune}
-              renderRow={this.renderRowRune}
-              contentInset={{top: -65}}
-              style={styles.runelist}/>
-            </View> :
-            <View/>
-          }
-        </View>
 
         </TouchableOpacity>
 
